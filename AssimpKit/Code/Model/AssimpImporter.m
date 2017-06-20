@@ -592,12 +592,8 @@ makeIndicesGeometryElementForMeshIndex:(int)aiMeshIndex
         struct aiString aiPath;
         aiGetMaterialTexture(aiMaterial, aiTextureType, 0, &aiPath, NULL, NULL,
                              NULL, NULL, NULL, NULL);
-        NSString *texFilePath = [NSString
+        NSString *texPath = [NSString
             stringWithUTF8String:(const char *_Nonnull) & aiPath.data];
-        NSString *texFileName = [texFilePath lastPathComponent];
-        NSString *sceneDir = [[path stringByDeletingLastPathComponent]
-            stringByAppendingString:@"/"];
-        NSString *texPath = [sceneDir stringByAppendingString:texFileName];
         DLog(@"  tex path is %@", texPath);
 
         NSString *channel = @".mappingChannel";
