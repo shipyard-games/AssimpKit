@@ -41,6 +41,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "assimp/postprocess.h" // Post processing flags
 #include "assimp/scene.h"       // Output data structure
 
+/**
+ * http://entropymine.com/imageworsener/srgbformula/
+ */
+float sRGBColorComponentToLinear(float sRGBColorComponent) {
+    if (sRGBColorComponent <= 0.04045) {
+        return sRGBColorComponent / 12.92;
+    } else {
+        return pow((sRGBColorComponent + 0.055) / 1.055, 2.4);
+    }
+}
+
 @interface AssimpImporter ()
 
 #pragma mark - Bone data
@@ -385,9 +396,9 @@ makeColorGeometrySourceForNode:(const struct aiNode *)aiNode
         if (aiColor4D == NULL) { return NULL; }
         
         for (int j = 0; j < nVertices; j++) {
-            scnColors[colorsCounter++] = aiColor4D[j].r;
-            scnColors[colorsCounter++] = aiColor4D[j].g;
-            scnColors[colorsCounter++] = aiColor4D[j].b;
+	    scnColors[colorsCounter++] = sRGBColorComponentToLinear(aiColor4D[j].r);
+	    scnColors[colorsCounter++] = sRGBColorComponentToLinear(aiColor4D[j].g);
+	    scnColors[colorsCounter++] = sRGBColorComponentToLinear(aiColor4D[j].b);
         }
     }
     
