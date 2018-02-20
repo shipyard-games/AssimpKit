@@ -46,10 +46,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * http://entropymine.com/imageworsener/srgbformula/
  */
 float sRGBColorComponentToLinear(float sRGBColorComponent) {
+    float linearColorComponent;
     if (sRGBColorComponent <= 0.04045) {
-        return sRGBColorComponent / 12.92;
+        linearColorComponent = sRGBColorComponent / 12.92;
     } else {
-        return pow((sRGBColorComponent + 0.055) / 1.055, 2.4);
+        linearColorComponent = pow((sRGBColorComponent + 0.055) / 1.055, 2.4);
+    }
+
+    if (linearColorComponent > 1.0) {
+        return 1.0;
+    }
+    else if (linearColorComponent < 0.0) {
+        return 0.0;
+    }
+    else {
+        return linearColorComponent;
     }
 }
 
